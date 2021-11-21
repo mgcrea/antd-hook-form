@@ -2,9 +2,11 @@
   "name": "create-vite-app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lint": "eslint src/",
+    "pretty": "prettier --check src/"
   },
   "dependencies": {
     "react": "^17.0.2",
@@ -18,9 +20,11 @@
     "@vitejs/plugin-react": "^1.0.9",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^25.2.4",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.4.1",
     "typescript": "^4.5.2",
     "vite": "^2.6.14"
   }

@@ -17,5 +17,10 @@
       {"varsIgnorePattern": "^_", "argsIgnorePattern": "^_", "ignoreRestSiblings": true}
     ],
     "react/no-unescaped-entities": ["off"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
