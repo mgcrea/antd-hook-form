@@ -1,6 +1,6 @@
 .DS_Store
+.idea/
 .vscode/
 *.local
-dist-ssr/
-dist/
+lib/
 node_modules/
