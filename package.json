@@ -1,9 +1,10 @@
 {
   "name": "antd-react-hook-form",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "license": "MIT",
   "main": "./lib/index.umd.js",
   "module": "./lib/index.es.js",
+  "types": "./lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/index.es.js",
