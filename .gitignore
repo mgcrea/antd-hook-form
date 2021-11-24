@@ -2,5 +2,6 @@
 .idea/
 .vscode/
 *.local
+*.tgz
 lib/
 node_modules/

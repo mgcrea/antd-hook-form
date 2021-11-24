@@ -14,24 +14,13 @@ module.exports = defineConfig({
     },
     rollupOptions: {
       plugins: [peerDepsExternal(), typescript()],
-      // output: {
-      //   exports: 'named',
-      //   globals: {
-      //     react: 'React',
-      //   },
-      // },
-      output: [
-        // {
-        //   dir: './lib/es',
-        //   format: 'cjs',
-        //   sourcemap: true,
-        // },
-        {
-          dir: './lib',
-          format: 'esm',
-          sourcemap: true,
+      output: {
+        exports: 'named',
+        sourcemap: true,
+        globals: {
+          react: 'React',
         },
-      ],
+      },
     },
   },
 });
