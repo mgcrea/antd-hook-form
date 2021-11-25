@@ -1,5 +1,5 @@
 {
-  "name": "antd-react-hook-form",
+  "name": "@mgcrea/antd-hook-form",
   "version": "0.2.4",
   "license": "MIT",
   "main": "./lib/index.umd.js",
