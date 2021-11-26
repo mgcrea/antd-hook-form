@@ -16,7 +16,7 @@ npm install @mgcrea/antd-hook-form
 
 ```tsx
 import React from 'react';
-import Form, {FormProps} from '@mgcrea/antd-hook-form';
+import {Form, FormProps} from '@mgcrea/antd-hook-form';
 
 function App() {
   const onSubmit = (data) => console.log(data);
