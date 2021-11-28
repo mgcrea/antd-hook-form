@@ -7,11 +7,13 @@
   "types": "./lib/esm/index.d.ts",
   "scripts": {
     "start": "start-storybook -p 6006",
+    "start:vite": "vite",
     "build": "rimraf lib/* && rollup --config rollup.config.ts --configPlugin typescript",
-    "serve": "vite preview",
-    "lint": "eslint src/",
-    "pretty": "prettier --check src/",
-    "build-storybook": "build-storybook"
+    "lint": "eslint src/ stories/",
+    "prettycheck": "prettier --check src/ stories/",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run lint && npm run prettycheck && npm run typecheck",
+    "docs": "build-storybook -o ./docs"
   },
   "peerDependencies": {
     "antd": ">=4.17",
