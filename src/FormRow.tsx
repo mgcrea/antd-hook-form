@@ -40,7 +40,7 @@ export const FormRow: FunctionComponent<FormRowProps> = ({
             PropsWithChildren<ControllerRenderProps & {id: string; size: SizeType}>
           >;
           return cloneElement(element, {
-            size: sizeContext,
+            size: element.props.size ?? sizeContext,
           });
         })}
       </FormItemInput>

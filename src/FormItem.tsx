@@ -58,10 +58,10 @@ export const FormItem = <T extends FieldValues = FieldValues>({
             PropsWithChildren<ControllerRenderProps & {id: string; size: SizeType}>
           >;
           return cloneElement(element, {
-            id: fieldId,
+            id: element.props.id ?? fieldId,
             [valuePropName]: value,
             [trigger]: onChange,
-            size: sizeContext,
+            size: element.props.size ?? sizeContext,
             ...field,
           });
         })}

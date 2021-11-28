@@ -52,6 +52,9 @@ export const FormSize: FunctionComponent<FormProps> = (props) => {
         </Form.Item>
         <Form.Row wrapperCol={{span: 14, offset: 4}}>
           <Button htmlType="submit">Button</Button>
+          <Button htmlType="submit" size="small">
+            Button
+          </Button>
         </Form.Row>
       </Form>
     </section>
