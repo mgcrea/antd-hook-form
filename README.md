@@ -1,11 +1,21 @@
 # antd-hook-form
 
 <p align="center">
-
-[![npm downloads](https://img.shields.io/npm/dm/react-hook-form.svg?style=for-the-badge)](https://www.npmjs.com/package/@mgcrea/antd-hook-form)
-[![npm](https://img.shields.io/npm/dt/@mgcrea/antd-hook-form.svg?style=for-the-badge)](https://www.npmjs.com/package/@mgcrea/antd-hook-form)
-[![npm](https://img.shields.io/npm/l/@mgcrea/antd-hook-form?style=for-the-badge)](https://github.com/@mgcrea/antd-hook-form/blob/master/LICENSE)
-
+  <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
+    <img src="https://img.shields.io/npm/v/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm version" />
+  </a>
+  <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
+    <img src="https://img.shields.io/npm/dt/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm total downloads" />
+  </a>
+  <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
+    <img src="https://img.shields.io/npm/dm/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm monthly downloads" />
+  </a>
+  <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
+    <img src="https://img.shields.io/npm/l/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm license" />
+  </a>
+  <a href="https://github.com/mgcrea/antd-hook-form/actions/workflows/main.yml">
+    <img src="https://img.shields.io/github/workflow/status/mgcrea/antd-hook-form/main?style=for-the-badge" alt="github main workflow" />
+  </a>
 </p>
 
 ## Features
