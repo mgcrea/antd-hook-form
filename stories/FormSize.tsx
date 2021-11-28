@@ -1,6 +1,6 @@
 import {Button, Cascader, DatePicker, Input, InputNumber, Radio, Select, Switch, TreeSelect} from 'antd';
 import React, {FunctionComponent} from 'react';
-import Form, {FormProps} from '../src/';
+import {Form, FormProps} from '../src/';
 
 export const FormSize: FunctionComponent<FormProps> = (props) => {
   return (
