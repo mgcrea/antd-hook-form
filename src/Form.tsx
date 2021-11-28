@@ -10,12 +10,15 @@ import {
 } from 'react-hook-form';
 import {FormProps as BaseFormProps} from 'antd';
 import {ConfigContext} from 'antd/lib/config-provider';
-import SizeContext, {SizeContextProvider} from 'antd/lib/config-provider/SizeContext';
+import SizeContext, {SizeContextProvider, SizeType} from 'antd/lib/config-provider/SizeContext';
 import classNames from 'classnames';
 import {FormContext, FormContextProps} from 'antd/lib/form/context';
 
+// Support @mgcrea/antd-extended
+type ExtendedSizeType = SizeType | 'x-small' | 'x-large' | 'xx-large';
+
 export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
-  onSubmit?: SubmitHandler<T>;
+  onSubmit: SubmitHandler<T>;
   onSubmitError?: SubmitErrorHandler<T>;
   onValuesChange?: WatchObserver<T>;
 } & Pick<
@@ -29,16 +32,17 @@ export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
     | 'name'
     | 'prefixCls'
     | 'requiredMark'
-    | 'size'
     | 'wrapperCol'
-  >;
+  > & {
+    size: ExtendedSizeType;
+  };
 
 export const Form = <T extends FieldValues = FieldValues>({
   name,
   className = '',
   children,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onSubmit = () => {},
+  onSubmit,
   onSubmitError,
   onValuesChange,
   size: propSize,
@@ -107,7 +111,7 @@ export const Form = <T extends FieldValues = FieldValues>({
   );
 
   return (
-    <SizeContextProvider size={size}>
+    <SizeContextProvider size={size as SizeType}>
       <FormContext.Provider value={formContextValue}>
         <FormProvider watch={watch} {...methods}>
           <form className={formClassName} onSubmit={methods.handleSubmit(onSubmit, onSubmitError)}>
