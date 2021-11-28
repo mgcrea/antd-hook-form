@@ -1,5 +1,13 @@
 # antd-hook-form
 
+<p align="center">
+
+[![npm downloads](https://img.shields.io/npm/dm/react-hook-form.svg?style=for-the-badge)](https://www.npmjs.com/package/@mgcrea/antd-hook-form)
+[![npm](https://img.shields.io/npm/dt/@mgcrea/antd-hook-form.svg?style=for-the-badge)](https://www.npmjs.com/package/@mgcrea/antd-hook-form)
+[![npm](https://img.shields.io/npm/l/@mgcrea/antd-hook-form?style=for-the-badge)](https://github.com/@mgcrea/antd-hook-form/blob/master/LICENSE)
+
+</p>
+
 ## Features
 
 - Provides a `<Form />` component that enables you to use [react-hook-form](https://react-hook-form.com/) with [AntDesign](https://ant.design/)
