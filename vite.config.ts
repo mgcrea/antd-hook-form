@@ -4,6 +4,8 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import {defineConfig} from 'vite';
 import packageJson from './package.json';
 
+const sourcemap = true;
+
 module.exports = defineConfig({
   build: {
     outDir: './lib',
@@ -14,13 +16,23 @@ module.exports = defineConfig({
     },
     rollupOptions: {
       plugins: [peerDepsExternal(), typescript()],
-      output: {
-        exports: 'named',
-        sourcemap: true,
-        globals: {
-          react: 'React',
+      output: [
+        {
+          exports: 'named',
+          file: `${packageJson.main}`,
+          format: 'umd',
+          name: 'antd-extended',
+          sourcemap,
         },
-      },
+        {
+          exports: 'named',
+          dir: path.dirname(packageJson.module),
+          format: 'esm',
+          sourcemap,
+          preserveModules: true,
+          preserveModulesRoot: 'src/',
+        },
+      ],
     },
   },
 });
