@@ -1,6 +1,6 @@
 {
   "name": "@mgcrea/antd-hook-form",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "license": "MIT",
   "main": "./lib/umd/index.js",
   "module": "./lib/esm/index.js",
