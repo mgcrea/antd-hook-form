@@ -4,9 +4,9 @@
   <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
     <img src="https://img.shields.io/npm/v/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm version" />
   </a>
-  <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
+  <!-- <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
     <img src="https://img.shields.io/npm/dt/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm total downloads" />
-  </a>
+  </a> -->
   <a href="https://www.npmjs.com/package/@mgcrea/antd-hook-form">
     <img src="https://img.shields.io/npm/dm/@mgcrea/antd-hook-form.svg?style=for-the-badge" alt="npm monthly downloads" />
   </a>
