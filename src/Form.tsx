@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, ReactElement, useContext, useEffect, useMemo} from 'react';
+import React, {FormHTMLAttributes, PropsWithChildren, ReactElement, useContext, useEffect, useMemo} from 'react';
 import {
   FieldValues,
   FormProvider,
@@ -8,38 +8,37 @@ import {
   UseFormProps,
   WatchObserver,
 } from 'react-hook-form';
-import {FormProps as BaseFormProps} from 'antd';
+import {FormProps as AntFormProps} from 'antd';
 import {ConfigContext} from 'antd/lib/config-provider';
 import SizeContext, {SizeContextProvider, SizeType} from 'antd/lib/config-provider/SizeContext';
 import classNames from 'classnames';
 import {FormContext, FormContextProps} from 'antd/lib/form/context';
+import {FormProps as RcFormProps} from 'rc-field-form/lib/Form';
 
 // Support @mgcrea/antd-extended
 type ExtendedSizeType = SizeType | 'x-small' | 'x-large' | 'xx-large';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type BaseFormProps<Values = any> = Omit<AntFormProps<Values>, keyof RcFormProps<Values>>;
+type EligibleBaseFormProps = Pick<
+  BaseFormProps,
+  'colon' | 'hideRequiredMark' | 'labelAlign' | 'labelCol' | 'layout' | 'prefixCls' | 'requiredMark' | 'wrapperCol'
+>;
+type HTMLFormProps = FormHTMLAttributes<HTMLFormElement>;
+
 export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
+  name?: string;
   onSubmit: SubmitHandler<T>;
   onSubmitError?: SubmitErrorHandler<T>;
   onValuesChange?: WatchObserver<T>;
-} & Pick<
-    BaseFormProps,
-    | 'className'
-    | 'colon'
-    | 'hideRequiredMark'
-    | 'labelAlign'
-    | 'labelCol'
-    | 'layout'
-    | 'name'
-    | 'prefixCls'
-    | 'requiredMark'
-    | 'wrapperCol'
-  > & {
+} & EligibleBaseFormProps & {
     size: ExtendedSizeType;
-  };
+  } & Pick<HTMLFormProps, 'className' | 'style'>;
 
 export const Form = <T extends FieldValues = FieldValues>({
   name,
   className = '',
+  style,
   children,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onSubmit,
@@ -114,7 +113,12 @@ export const Form = <T extends FieldValues = FieldValues>({
     <SizeContextProvider size={size as SizeType}>
       <FormContext.Provider value={formContextValue}>
         <FormProvider watch={watch} {...methods}>
-          <form className={formClassName} onSubmit={methods.handleSubmit(onSubmit, onSubmitError)}>
+          <form
+            name={name}
+            className={formClassName}
+            onSubmit={methods.handleSubmit(onSubmit, onSubmitError)}
+            style={style}
+          >
             {children}
           </form>
         </FormProvider>
