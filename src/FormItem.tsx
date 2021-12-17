@@ -5,7 +5,17 @@ import {FormContext} from 'antd/lib/form/context';
 import FormItemInput from 'antd/lib/form/FormItemInput';
 import FormItemLabel from 'antd/lib/form/FormItemLabel';
 import classNames from 'classnames';
-import React, {Children, cloneElement, isValidElement, PropsWithChildren, ReactElement, useContext} from 'react';
+import React, {
+  Children,
+  cloneElement,
+  isValidElement,
+  PropsWithChildren,
+  ReactElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
 import {ControllerProps, ControllerRenderProps, FieldValues, useController, useFormContext} from 'react-hook-form';
 
 export type FormItemProps<T> = Pick<ControllerProps<T>, 'name' | 'rules' | 'defaultValue' | 'control'> &
@@ -37,6 +47,14 @@ export const FormItem = <T extends FieldValues = FieldValues>({
     defaultValue,
   });
 
+  // @NOTE use a stable ref for the onChange callback
+  // https://github.com/react-hook-form/react-hook-form/pull/5113#issuecomment-988172807
+  const handleChangeRef = useRef(onChange);
+  const handleChange = useCallback((...args) => handleChangeRef.current(...args), []);
+  useEffect(() => {
+    handleChangeRef.current = (event) => onChange(event);
+  }, [onChange]);
+
   const {getPrefixCls} = useContext(ConfigContext);
   const sizeContext = useContext(SizeContext);
   const formContext = useContext(FormContext);
@@ -60,7 +78,7 @@ export const FormItem = <T extends FieldValues = FieldValues>({
           return cloneElement(element, {
             id: element.props.id ?? fieldId,
             [valuePropName]: value,
-            [trigger]: onChange,
+            [trigger]: handleChange,
             size: element.props.size ?? sizeContext,
             ...field,
           });

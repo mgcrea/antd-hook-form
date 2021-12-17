@@ -24,6 +24,7 @@ type EligibleBaseFormProps = Pick<
   BaseFormProps,
   'colon' | 'hideRequiredMark' | 'labelAlign' | 'labelCol' | 'layout' | 'prefixCls' | 'requiredMark' | 'wrapperCol'
 >;
+// type NonSupportedProps = Omit<BaseFormProps, keyof EligibleBaseFormProps>
 type HTMLFormProps = FormHTMLAttributes<HTMLFormElement>;
 
 export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
