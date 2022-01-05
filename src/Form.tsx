@@ -1,3 +1,9 @@
+import {FormProps as AntFormProps} from 'antd';
+import {ConfigContext} from 'antd/lib/config-provider';
+import SizeContext, {SizeContextProvider, SizeType} from 'antd/lib/config-provider/SizeContext';
+import {FormContext, FormContextProps} from 'antd/lib/form/context';
+import classNames from 'classnames';
+import {FormProps as RcFormProps} from 'rc-field-form/lib/Form';
 import React, {FormHTMLAttributes, PropsWithChildren, ReactElement, useContext, useEffect, useMemo} from 'react';
 import {
   FieldValues,
@@ -8,12 +14,7 @@ import {
   UseFormProps,
   WatchObserver,
 } from 'react-hook-form';
-import {FormProps as AntFormProps} from 'antd';
-import {ConfigContext} from 'antd/lib/config-provider';
-import SizeContext, {SizeContextProvider, SizeType} from 'antd/lib/config-provider/SizeContext';
-import classNames from 'classnames';
-import {FormContext, FormContextProps} from 'antd/lib/form/context';
-import {FormProps as RcFormProps} from 'rc-field-form/lib/Form';
+import {filterDirtyValues} from './utils';
 
 // Support @mgcrea/antd-extended
 type ExtendedSizeType = SizeType | 'x-small' | 'x-large' | 'xx-large';
@@ -34,6 +35,7 @@ export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
   onValuesChange?: WatchObserver<T>;
 } & EligibleBaseFormProps & {
     size: ExtendedSizeType;
+    onlyChangedValues?: boolean;
   } & Pick<HTMLFormProps, 'className' | 'style'>;
 
 export const Form = <T extends FieldValues = FieldValues>({
@@ -45,6 +47,7 @@ export const Form = <T extends FieldValues = FieldValues>({
   onSubmit,
   onSubmitError,
   onValuesChange,
+  onlyChangedValues,
   size: propSize,
   layout = 'horizontal',
   prefixCls: propPrefixCls,
@@ -56,7 +59,7 @@ export const Form = <T extends FieldValues = FieldValues>({
   requiredMark: propRequiredMark,
   ...otherProps
 }: PropsWithChildren<FormProps<T>>): ReactElement => {
-  const {watch, ...methods} = useForm<T>(otherProps);
+  const {watch, formState, ...methods} = useForm<T>(otherProps);
   useEffect(() => {
     if (!onValuesChange) {
       return;
@@ -110,14 +113,18 @@ export const Form = <T extends FieldValues = FieldValues>({
     className,
   );
 
+  const onValid: SubmitHandler<T> = async (values, event) => {
+    return await onSubmit(onlyChangedValues ? filterDirtyValues(formState.dirtyFields, values) : values, event);
+  };
+
   return (
     <SizeContextProvider size={size as SizeType}>
       <FormContext.Provider value={formContextValue}>
-        <FormProvider watch={watch} {...methods}>
+        <FormProvider watch={watch} formState={formState} {...methods}>
           <form
             name={name}
             className={formClassName}
-            onSubmit={methods.handleSubmit(onSubmit, onSubmitError)}
+            onSubmit={methods.handleSubmit(onValid, onSubmitError)}
             style={style}
           >
             {children}
