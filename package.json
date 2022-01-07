@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "test": "npm run lint && npm run prettycheck && npm run typecheck",
     "docs": "build-storybook -o ./docs",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "antd": ">=4.17",

@@ -4,7 +4,17 @@ import SizeContext, {SizeContextProvider, SizeType} from 'antd/lib/config-provid
 import {FormContext, FormContextProps} from 'antd/lib/form/context';
 import classNames from 'classnames';
 import {FormProps as RcFormProps} from 'rc-field-form/lib/Form';
-import React, {FormHTMLAttributes, PropsWithChildren, ReactElement, useContext, useEffect, useMemo} from 'react';
+import React, {
+  FormHTMLAttributes,
+  ForwardedRef,
+  forwardRef,
+  PropsWithChildren,
+  ReactElement,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+} from 'react';
 import {
   FieldValues,
   FormProvider,
@@ -12,6 +22,7 @@ import {
   SubmitHandler,
   useForm,
   UseFormProps,
+  UseFormReturn,
   WatchObserver,
 } from 'react-hook-form';
 import {filterDirtyValues} from './utils';
@@ -36,30 +47,36 @@ export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
 } & EligibleBaseFormProps & {
     size: ExtendedSizeType;
     onlyChangedValues?: boolean;
-  } & Pick<HTMLFormProps, 'className' | 'style'>;
+  } & Pick<HTMLFormProps, 'className' | 'style' | 'onKeyDown'>;
 
-export const Form = <T extends FieldValues = FieldValues>({
-  name,
-  className = '',
-  style,
-  children,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onSubmit,
-  onSubmitError,
-  onValuesChange,
-  onlyChangedValues,
-  size: propSize,
-  layout = 'horizontal',
-  prefixCls: propPrefixCls,
-  colon,
-  labelAlign,
-  labelCol,
-  wrapperCol,
-  hideRequiredMark,
-  requiredMark: propRequiredMark,
-  ...otherProps
-}: PropsWithChildren<FormProps<T>>): ReactElement => {
-  const {watch, formState, ...methods} = useForm<T>(otherProps);
+export type FormHandle<T extends FieldValues = FieldValues> = UseFormReturn<T>;
+
+const FormRenderFunction = <T extends FieldValues = FieldValues>(
+  {
+    name,
+    className = '',
+    style,
+    children,
+    onSubmit,
+    onSubmitError,
+    onValuesChange,
+    onlyChangedValues,
+    size: propSize,
+    layout = 'horizontal',
+    prefixCls: propPrefixCls,
+    colon,
+    labelAlign,
+    labelCol,
+    wrapperCol,
+    hideRequiredMark,
+    requiredMark: propRequiredMark,
+    onKeyDown,
+    ...otherProps
+  }: PropsWithChildren<FormProps<T>>,
+  ref: ForwardedRef<FormHandle<T>>,
+): ReactElement => {
+  const useFormReturn = useForm<T>(otherProps);
+  const {watch, handleSubmit, formState} = useFormReturn;
   useEffect(() => {
     if (!onValuesChange) {
       return;
@@ -113,18 +130,23 @@ export const Form = <T extends FieldValues = FieldValues>({
     className,
   );
 
+  // @NOTE https://react-hook-form.com/api/useform/formstate
+  const {dirtyFields} = formState;
   const onValid: SubmitHandler<T> = async (values, event) => {
-    return await onSubmit(onlyChangedValues ? filterDirtyValues(formState.dirtyFields, values) : values, event);
+    return await onSubmit(onlyChangedValues ? filterDirtyValues(dirtyFields, values) : values, event);
   };
+
+  useImperativeHandle(ref, () => useFormReturn);
 
   return (
     <SizeContextProvider size={size as SizeType}>
       <FormContext.Provider value={formContextValue}>
-        <FormProvider watch={watch} formState={formState} {...methods}>
+        <FormProvider {...useFormReturn}>
           <form
             name={name}
             className={formClassName}
-            onSubmit={methods.handleSubmit(onValid, onSubmitError)}
+            onSubmit={handleSubmit(onValid, onSubmitError)}
+            onKeyDown={onKeyDown}
             style={style}
           >
             {children}
@@ -134,3 +156,5 @@ export const Form = <T extends FieldValues = FieldValues>({
     </SizeContextProvider>
   );
 };
+
+export const Form = forwardRef(FormRenderFunction) as typeof FormRenderFunction;
