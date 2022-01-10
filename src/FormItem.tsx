@@ -19,7 +19,7 @@ import React, {
 import {ControllerProps, ControllerRenderProps, FieldValues, useController, useFormContext} from 'react-hook-form';
 
 export type FormItemProps<T> = Pick<ControllerProps<T>, 'name' | 'rules' | 'defaultValue' | 'control'> &
-  Pick<BaseFormItemProps, 'trigger' | 'valuePropName' | 'label' | 'noStyle'> &
+  Pick<BaseFormItemProps, 'trigger' | 'valuePropName' | 'label' | 'noStyle' | 'getValueFromEvent'> &
   RowProps;
 
 export const FormItem = <T extends FieldValues = FieldValues>({
@@ -33,6 +33,7 @@ export const FormItem = <T extends FieldValues = FieldValues>({
   valuePropName = 'value',
   noStyle,
   prefixCls: propPrefixCls,
+  getValueFromEvent,
   ...otherProps
 }: PropsWithChildren<FormItemProps<T>>): ReactElement => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -50,10 +51,13 @@ export const FormItem = <T extends FieldValues = FieldValues>({
   // @NOTE use a stable ref for the onChange callback
   // https://github.com/react-hook-form/react-hook-form/pull/5113#issuecomment-988172807
   const handleChangeRef = useRef(onChange);
-  const handleChange = useCallback((...args) => handleChangeRef.current(...args), []);
   useEffect(() => {
     handleChangeRef.current = (event) => onChange(event);
   }, [onChange]);
+  const handleChange = useCallback(
+    (...args) => handleChangeRef.current(...(getValueFromEvent ? [getValueFromEvent(...args)] : args)),
+    [getValueFromEvent],
+  );
 
   const {getPrefixCls} = useContext(ConfigContext);
   const sizeContext = useContext(SizeContext);
