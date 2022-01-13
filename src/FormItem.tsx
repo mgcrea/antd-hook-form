@@ -1,5 +1,8 @@
+// https://github.com/ant-design/ant-design/blob/master/components/form/FormItem.tsx
+
 import {FormItemProps as BaseFormItemProps, Row, RowProps} from 'antd';
 import {ConfigContext} from 'antd/lib/config-provider';
+// import RCFormContext from 'rc-field-form/lib/FormContext';
 import SizeContext, {SizeType} from 'antd/lib/config-provider/SizeContext';
 import {FormContext} from 'antd/lib/form/context';
 import FormItemInput from 'antd/lib/form/FormItemInput';
@@ -16,14 +19,15 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import {ControllerProps, ControllerRenderProps, FieldValues, useController, useFormContext} from 'react-hook-form';
+import {UseControllerProps, ControllerRenderProps, FieldValues, useController, useFormContext} from 'react-hook-form';
 
-export type FormItemProps<T> = Pick<ControllerProps<T>, 'name' | 'rules' | 'defaultValue' | 'control'> &
+export type FormItemProps<T> = Pick<UseControllerProps<T>, 'name' | 'rules' | 'defaultValue' | 'control'> &
   Pick<BaseFormItemProps, 'trigger' | 'valuePropName' | 'label' | 'noStyle' | 'getValueFromEvent'> &
   RowProps;
 
 export const FormItem = <T extends FieldValues = FieldValues>({
   children,
+  className,
   control: propControl,
   name,
   label,
@@ -62,10 +66,11 @@ export const FormItem = <T extends FieldValues = FieldValues>({
   const {getPrefixCls} = useContext(ConfigContext);
   const sizeContext = useContext(SizeContext);
   const formContext = useContext(FormContext);
+  // const rcFormContext = useContext(RCFormContext);
 
   const fieldId = formContext.name ? `${formContext.name}_${name}` : name;
   const validateStatus = fieldState.invalid ? 'error' : 'success';
-  const errors = fieldState.error ? [fieldState.error.type] : [];
+  const errors = fieldState.error ? [fieldState.error.message || fieldState.error.type] : [];
   const prefixCls = getPrefixCls('form', propPrefixCls);
 
   const formItem = (
@@ -93,12 +98,14 @@ export const FormItem = <T extends FieldValues = FieldValues>({
   if (noStyle) {
     return formItem;
   }
-  const className = classNames(`${prefixCls}-item`, {
-    [`${prefixCls}-item-with-help`]: errors.length,
-    [`${prefixCls}-item-has-error`]: validateStatus === 'error',
-  });
   return (
-    <Row className={className} {...otherProps}>
+    <Row
+      className={classNames(className, `${prefixCls}-item`, {
+        [`${prefixCls}-item-with-help`]: errors.length,
+        [`${prefixCls}-item-has-error`]: validateStatus === 'error',
+      })}
+      {...otherProps}
+    >
       {formItem}
     </Row>
   );

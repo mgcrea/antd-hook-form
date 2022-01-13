@@ -1,3 +1,5 @@
+<!-- markdownlint-disable no-inline-html -->
+
 # antd-hook-form
 
 <p align="center">

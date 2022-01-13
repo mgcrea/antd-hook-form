@@ -8,6 +8,7 @@
   "scripts": {
     "start": "start-storybook -p 6006",
     "start:vite": "vite",
+    "dev": "rollup --config rollup.config.ts --configPlugin typescript --watch",
     "build": "rimraf lib/* && rollup --config rollup.config.ts --configPlugin typescript",
     "lint": "eslint src/ stories/",
     "prettycheck": "prettier --check src/ stories/",

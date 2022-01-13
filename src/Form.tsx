@@ -10,6 +10,7 @@ import React, {
   forwardRef,
   PropsWithChildren,
   ReactElement,
+  RefAttributes,
   useContext,
   useEffect,
   useImperativeHandle,
@@ -157,4 +158,6 @@ const FormRenderFunction = <T extends FieldValues = FieldValues>(
   );
 };
 
-export const Form = forwardRef(FormRenderFunction) as typeof FormRenderFunction;
+export const Form = forwardRef(FormRenderFunction) as <T extends FieldValues = FieldValues>(
+  props: PropsWithChildren<FormProps<T>> & RefAttributes<FormHandle<T>>,
+) => ReactElement | null;
