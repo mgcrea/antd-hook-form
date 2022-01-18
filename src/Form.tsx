@@ -40,12 +40,12 @@ type EligibleBaseFormProps = Pick<
 // type NonSupportedProps = Omit<BaseFormProps, keyof EligibleBaseFormProps>
 type HTMLFormProps = FormHTMLAttributes<HTMLFormElement>;
 
-export type FormProps<T extends FieldValues = FieldValues> = UseFormProps<T> & {
-  name?: string;
-  onSubmit: SubmitHandler<T>;
-  onSubmitError?: SubmitErrorHandler<T>;
-  onValuesChange?: WatchObserver<T>;
-} & EligibleBaseFormProps & {
+export type FormProps<T extends FieldValues = FieldValues> = {form?: UseFormReturn<T>} & UseFormProps<T> & {
+    name?: string;
+    onSubmit: SubmitHandler<T>;
+    onSubmitError?: SubmitErrorHandler<T>;
+    onValuesChange?: WatchObserver<T>;
+  } & EligibleBaseFormProps & {
     size: ExtendedSizeType;
     onlyChangedValues?: boolean;
   } & Pick<HTMLFormProps, 'className' | 'style' | 'onKeyDown'>;
@@ -58,6 +58,7 @@ const FormRenderFunction = <T extends FieldValues = FieldValues>(
     className = '',
     style,
     children,
+    form,
     onSubmit,
     onSubmitError,
     onValuesChange,
@@ -76,7 +77,8 @@ const FormRenderFunction = <T extends FieldValues = FieldValues>(
   }: PropsWithChildren<FormProps<T>>,
   ref: ForwardedRef<FormHandle<T>>,
 ): ReactElement => {
-  const useFormReturn = useForm<T>(otherProps);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const useFormReturn = form || useForm<T>(otherProps);
   const {watch, handleSubmit, formState} = useFormReturn;
   useEffect(() => {
     if (!onValuesChange) {
