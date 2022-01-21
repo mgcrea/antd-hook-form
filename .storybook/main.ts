@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const vitePluginImp = require('vite-plugin-imp');
 const path = require('path');
 
@@ -14,8 +16,7 @@ module.exports = {
     return config;
   },
   async viteFinal(config, {configType}) {
-    // customize the Vite config here
-    config.resolve.alias.foo = 'bar';
+    config.resolve.alias['src/'] = `${path.resolve(__dirname, '../src')}/`;
     config.plugins.push(
       vitePluginImp.default({
         libList: [
@@ -40,7 +41,6 @@ module.exports = {
       },
     };
 
-    // return the customized config
     return config;
   },
 };
