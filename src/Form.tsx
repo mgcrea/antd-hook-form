@@ -41,19 +41,19 @@ type EligibleBaseFormProps = Pick<
 type HTMLFormProps = FormHTMLAttributes<HTMLFormElement>;
 
 export type FormProps<T extends FieldValues = FieldValues> = {form?: UseFormReturn<T>} & UseFormProps<T> & {
-    name?: string;
-    onSubmit: SubmitHandler<T>;
+    onSubmit?: SubmitHandler<T>;
     onSubmitError?: SubmitErrorHandler<T>;
     onValuesChange?: WatchObserver<T>;
   } & EligibleBaseFormProps & {
-    size: ExtendedSizeType;
+    size?: ExtendedSizeType;
     onlyChangedValues?: boolean;
-  } & Pick<HTMLFormProps, 'className' | 'style' | 'onKeyDown'>;
+  } & Pick<HTMLFormProps, 'id' | 'name' | 'className' | 'style' | 'onKeyDown'>;
 
 export type FormHandle<T extends FieldValues = FieldValues> = UseFormReturn<T>;
 
 const FormRenderFunction = <T extends FieldValues = FieldValues>(
   {
+    id,
     name,
     className = '',
     style,
@@ -136,6 +136,9 @@ const FormRenderFunction = <T extends FieldValues = FieldValues>(
   // @NOTE https://react-hook-form.com/api/useform/formstate
   const {dirtyFields} = formState;
   const onValid: SubmitHandler<T> = async (values, event) => {
+    if (!onSubmit) {
+      return;
+    }
     return await onSubmit(onlyChangedValues ? filterDirtyValues(dirtyFields, values) : values, event);
   };
 
@@ -146,6 +149,7 @@ const FormRenderFunction = <T extends FieldValues = FieldValues>(
       <FormContext.Provider value={formContextValue}>
         <FormProvider {...useFormReturn}>
           <form
+            id={id}
             name={name}
             className={formClassName}
             onSubmit={handleSubmit(onValid, onSubmitError)}
