@@ -1,6 +1,7 @@
 // https://github.com/ant-design/ant-design/blob/master/components/form/FormItem.tsx
 
 import {FormItemProps as BaseFormItemProps, Row, RowProps} from 'antd';
+import {ValidateStatus} from 'antd/es/form/FormItem';
 import {ConfigContext} from 'antd/lib/config-provider';
 // import RCFormContext from 'rc-field-form/lib/FormContext';
 import SizeContext, {SizeType} from 'antd/lib/config-provider/SizeContext';
@@ -21,7 +22,10 @@ import React, {
 } from 'react';
 import {UseControllerProps, ControllerRenderProps, FieldValues, useController, useFormContext} from 'react-hook-form';
 
-export type FormItemProps<T> = Pick<UseControllerProps<T>, 'name' | 'rules' | 'defaultValue' | 'control'> &
+export type FormItemProps<T extends FieldValues> = Pick<
+  UseControllerProps<T>,
+  'name' | 'rules' | 'defaultValue' | 'control'
+> &
   Pick<BaseFormItemProps, 'trigger' | 'valuePropName' | 'label' | 'noStyle' | 'getValueFromEvent'> &
   RowProps;
 
@@ -59,7 +63,7 @@ export const FormItem = <T extends FieldValues = FieldValues>({
     handleChangeRef.current = (event) => onChange(event);
   }, [onChange]);
   const handleChange = useCallback(
-    (...args) => handleChangeRef.current(...(getValueFromEvent ? [getValueFromEvent(...args)] : args)),
+    (...args: any[]) => handleChangeRef.current(...(getValueFromEvent ? [getValueFromEvent(...args)] : args)),
     [getValueFromEvent],
   );
 
@@ -69,14 +73,14 @@ export const FormItem = <T extends FieldValues = FieldValues>({
   // const rcFormContext = useContext(RCFormContext);
 
   const fieldId = formContext.name ? `${formContext.name}_${name}` : name;
-  const validateStatus = fieldState.invalid ? 'error' : 'success';
+  const validateStatus: ValidateStatus = fieldState.error ? 'error' : 'success';
   const errors = fieldState.error ? [fieldState.error.message || fieldState.error.type] : [];
   const prefixCls = getPrefixCls('form', propPrefixCls);
 
   const formItem = (
     <>
       <FormItemLabel prefixCls={prefixCls} htmlFor={fieldId} required={!!rules?.required} label={label} />
-      <FormItemInput prefixCls={prefixCls} validateStatus={validateStatus} errors={errors} warnings={[]}>
+      <FormItemInput prefixCls={prefixCls} status={validateStatus} errors={errors} warnings={[]}>
         {Children.map(children, (child) => {
           if (!isValidElement(child)) {
             return;

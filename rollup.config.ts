@@ -1,7 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import path from 'path';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import packageJson from './package.json';
+import packageJson from './package.json' assert {type: 'json'};
 
 const sourcemap = true;
 
